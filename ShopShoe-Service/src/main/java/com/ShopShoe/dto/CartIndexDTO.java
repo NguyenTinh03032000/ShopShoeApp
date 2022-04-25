@@ -3,9 +3,6 @@ package com.ShopShoe.dto;
 import com.ShopShoe.entity.CartEntity;
 import com.ShopShoe.entity.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-
-@Data
 
 public class CartIndexDTO {
 

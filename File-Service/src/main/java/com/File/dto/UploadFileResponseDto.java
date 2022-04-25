@@ -1,4 +1,4 @@
-package com.ShopShoe.dto;
+package com.File.dto;
 
 public class UploadFileResponseDto {
 	private String fileName;

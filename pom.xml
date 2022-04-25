@@ -6,7 +6,8 @@
 	<modules>
 		<module>eureka-server</module>
 		<module>ShopShoe-Service</module>
-	</modules>
+        <module>File-Service</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

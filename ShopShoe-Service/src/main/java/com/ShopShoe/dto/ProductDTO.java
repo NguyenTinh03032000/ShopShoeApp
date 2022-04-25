@@ -2,9 +2,8 @@ package com.ShopShoe.dto;
 
 import com.ShopShoe.entity.CategoryEntity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 @Data
 public class ProductDTO {
 

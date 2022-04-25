@@ -2,12 +2,6 @@ package com.ShopShoe.dto;
 
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-
 public class TokenDTO {
 
 	private Long id;
