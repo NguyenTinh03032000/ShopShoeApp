@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -207,12 +206,9 @@ public class AuthController {
 			roles.add(customerRole);
 		}else {
 			strRole.forEach(role ->{
-				switch (role) {
-					default:
-						RoleEntity customerRole = roleService.findByName(ERole.ROLE_CUSTOMER)
-								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-						roles.add(customerRole);
-				}
+				RoleEntity customerRole = roleService.findByName(ERole.ROLE_CUSTOMER)
+						.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+				roles.add(customerRole);
 			});
 		}
 		user.setRoles(roles);

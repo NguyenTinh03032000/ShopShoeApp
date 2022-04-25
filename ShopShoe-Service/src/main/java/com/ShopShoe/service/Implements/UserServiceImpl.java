@@ -1,17 +1,19 @@
 package com.ShopShoe.service.Implements;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.ShopShoe.Mapper.UserMapper;
 import com.ShopShoe.dto.UserDTO;
 import com.ShopShoe.entity.UserEntity;
 import com.ShopShoe.repository.UserRepository;
 import com.ShopShoe.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+
+@Service
 public class UserServiceImpl implements UserService {
 	
 	@Autowired

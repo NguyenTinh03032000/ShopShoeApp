@@ -1,15 +1,16 @@
 package com.ShopShoe.service.Implements;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.ShopShoe.entity.CartEntity;
 import com.ShopShoe.entity.UserEntity;
 import com.ShopShoe.repository.CartRepository;
 import com.ShopShoe.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
+@Service
 public class CartServiceImpl implements CartService {
 	
 	@Autowired

@@ -1,4 +1,8 @@
 package com.ShopShoe.service.Implements;
+
+
+import com.ShopShoe.entity.UserEntity;
+import com.ShopShoe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -6,10 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ShopShoe.entity.UserEntity;
-import com.ShopShoe.repository.UserRepository;
-
-@Service("UserDetailsServiceImpl")
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 	
 	@Autowired

@@ -1,9 +1,6 @@
 package com.ShopShoe.controllers;
 
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -42,59 +39,63 @@ public class CartController {
 	 * @Param : None
 	 * @return list cart index in cart
 	 */
-	
-	@GetMapping()
-	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
-	public List<CartIndexDTO> getAllProductInCart() {
+	public UserEntity getCurrentUser(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetailsImpl u = (UserDetailsImpl) authentication.getPrincipal();
 		UserEntity currentUser = userService.getById(u.getId());
-		
-		CartEntity cart = cartService.findByUser(currentUser);
-		if(cart != null) {
-			List<CartIndexDTO> listIndex = cartIndexService.findByCart(cart);
-			return listIndex;
+		return  currentUser;
+	}
+
+	@GetMapping()
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+	public List<CartIndexDTO> getAllProductInCart() {
+		try{
+			CartEntity cart = cartService.findByUser(getCurrentUser());
+			if(cart != null) {
+				List<CartIndexDTO> listIndex = cartIndexService.findByCart(cart);
+				return listIndex;
+			}
+			return null;
+		}catch (Exception e){
+			return null;
 		}
-		return null;
 	}
 	
 	/**
 	 * @Content add product to cart
-	 * @param id product
-	 * @param request
-	 * @return
+	 * @param id
+	 * @return success or no product found
 	 */
 	@PostMapping("/addProduct")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
-	public String addToCart(@RequestParam("idProduct") String id,HttpServletRequest request) {
+	public String addToCart(@RequestParam("idProduct") String id) {
 		try {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			UserDetailsImpl u = (UserDetailsImpl) authentication.getPrincipal();
-			UserEntity currentUser = userService.getById(u.getId());
-			
 			ProductEntity product = productService.getById(Long.parseLong(id));
-			CartEntity cart = cartService.findByUser(currentUser);
+			CartEntity cart = cartService.findByUser(getCurrentUser());
 			
 			if(cart == null)
 			{
 				cart = new CartEntity();
-				cart.setUser(currentUser);
+				cart.setUser(getCurrentUser());
 				cart = cartService.save(cart);			
 			}
-			
-			CartIndexEntity cartIndex = cartIndexService.findByProductAndCart(product, cart);
-			
-			if(cartIndex == null){    
-				cartIndex = new CartIndexEntity();
-				cartIndex.setCart(cart);
-				cartIndex.setProduct(product);
-				cartIndex.setAmount(1);
+			if(product == null){
+				return "No products found";
+			}else{
+				CartIndexEntity cartIndex = cartIndexService.findByProductAndCart(product, cart);
+
+				if(cartIndex == null){
+					cartIndex = new CartIndexEntity();
+					cartIndex.setCart(cart);
+					cartIndex.setProduct(product);
+					cartIndex.setAmount(1);
+				}
+				else{
+					cartIndex.setAmount(cartIndex.getAmount()+1);
+				}
+				cartIndexService.save(cartIndex);
+				return "success";
 			}
-			else{
-				cartIndex.setAmount(cartIndex.getAmount()+1);
-			}
-			cartIndex = cartIndexService.save(cartIndex);
-			return "success";
 		} catch (Exception e) {
 			return "Error";
 		}
@@ -102,22 +103,59 @@ public class CartController {
 	
 	/**
 	 * @Content change number product in cart
-	 * @param id product
+	 * @param idProduct
 	 * @param value
 	 * @return
 	 */
-	@PostMapping("/changProductQuanity")
+	@PostMapping("/changProductQuality")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
-	public String changQuanity(@RequestParam String id, @RequestParam String value) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserDetailsImpl u = (UserDetailsImpl) authentication.getPrincipal();
-		UserEntity currentUser = userService.getById(u.getId());
-		
-		CartEntity cartEntity = cartService.findByUser(currentUser);
-		ProductEntity product = productService.getById(Long.parseLong(id));
-		CartIndexEntity cartIndexEntity = cartIndexService.findByProductAndCart(product, cartEntity);
-		cartIndexEntity.setAmount(Integer.parseInt(value));
-		cartIndexEntity = cartIndexService.save(cartIndexEntity);
-		return "Success";
+	public String changProductQuality(@RequestParam String idProduct, @RequestParam String value) {
+		try{
+			CartEntity cartEntity = cartService.findByUser(getCurrentUser());
+			if(cartEntity == null)
+			{
+				cartEntity = new CartEntity();
+				cartEntity.setUser(getCurrentUser());
+				cartEntity = cartService.save(cartEntity);
+			}
+			ProductEntity product = productService.getById(Long.parseLong(idProduct));
+			if(product == null){
+				return "No products found";
+			}else {
+				CartIndexEntity cartIndexEntity = cartIndexService.findByProductAndCart(product, cartEntity);
+				cartIndexEntity.setAmount(Integer.parseInt(value));
+				cartIndexService.save(cartIndexEntity);
+				return "Change success";
+			}
+		}catch (Exception e){
+			return "Error";
+		}
+	}
+	@PostMapping("/deleteProductQuality")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
+	public String deleteProductFromCart(@RequestParam String idProduct) {
+		try{
+			CartEntity cartEntity = cartService.findByUser(getCurrentUser());
+			if(cartEntity == null)
+			{
+				cartEntity = new CartEntity();
+				cartEntity.setUser(getCurrentUser());
+				cartEntity = cartService.save(cartEntity);
+			}
+			ProductEntity product = productService.getById(Long.parseLong(idProduct));
+			if(product == null){
+				return "No products found";
+			}else {
+				CartIndexEntity cartIndexEntity = cartIndexService.findByProductAndCart(product, cartEntity);
+				if(cartIndexEntity == null){
+					return "This cart index is not in the cart";
+				}else {
+					cartIndexService.delete(cartIndexEntity);
+					return "Delete success";
+				}
+			}
+		}catch (Exception e){
+			return "Error";
+		}
 	}
 }

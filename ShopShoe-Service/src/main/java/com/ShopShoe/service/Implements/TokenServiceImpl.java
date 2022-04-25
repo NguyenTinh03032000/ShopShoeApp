@@ -1,13 +1,15 @@
 package com.ShopShoe.service.Implements;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.ShopShoe.entity.TokenEntity;
 import com.ShopShoe.repository.TokenRepository;
 import com.ShopShoe.service.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
+@Service
 public class TokenServiceImpl implements TokenService {
 	
 	@Autowired

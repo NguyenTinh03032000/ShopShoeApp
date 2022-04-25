@@ -1,16 +1,18 @@
 package com.ShopShoe.service.Implements;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.ShopShoe.dto.LogDTO;
 import com.ShopShoe.entity.LogEntity;
 import com.ShopShoe.repository.LogRepository;
 import com.ShopShoe.service.LogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+
+@Service
 public class LogServiceImpl implements LogService {
 	
 	@Autowired

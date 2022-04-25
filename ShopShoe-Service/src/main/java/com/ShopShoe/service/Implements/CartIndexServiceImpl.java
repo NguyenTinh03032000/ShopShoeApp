@@ -1,9 +1,4 @@
 package com.ShopShoe.service.Implements;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.ShopShoe.Mapper.CartIndexMapper;
 import com.ShopShoe.dto.CartIndexDTO;
@@ -12,8 +7,14 @@ import com.ShopShoe.entity.CartIndexEntity;
 import com.ShopShoe.entity.ProductEntity;
 import com.ShopShoe.repository.CartIndexRepository;
 import com.ShopShoe.service.CartIndexService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
+@Service
 public class CartIndexServiceImpl implements CartIndexService {
 	
 	@Autowired
