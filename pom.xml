@@ -7,6 +7,7 @@
 		<module>eureka-server</module>
 		<module>ShopShoe-Service</module>
         <module>File-Service</module>
+        <module>Config-Server</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
