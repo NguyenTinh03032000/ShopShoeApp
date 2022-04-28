@@ -1,4 +1,10 @@
 package com.ShopShoe.dto;
+
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class UserDTO {
 	
 	private Long id;
@@ -8,11 +14,15 @@ public class UserDTO {
 	private String address;
 	
 	private String phone_number;
-	
+
+	@NotEmpty(message = "Username cannot be empty")
 	private String username;
-	
+
+	@NotEmpty(message = "Email cannot be empty")
+	@Email
 	private String email;
-	
+
+	@Length(min=8, max=32, message="Password must be 8-32 characters long")
 	private String password;
 	
 	private long scores;

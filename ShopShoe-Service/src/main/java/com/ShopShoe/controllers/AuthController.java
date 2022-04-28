@@ -97,7 +97,7 @@ public class AuthController {
 			tokenEntity.setCreate_date(null);
 			tokenEntity.setUpdate_date(null);
 			tokenService.save(tokenEntity);
-			return "Logout successfuly";
+			return "Logout successful";
 		} catch (Exception e) {
 			return "Logout fail";
 		}

@@ -31,8 +31,8 @@ create table if not exists user_roles (
 	user_id bigint not null,
     role_id int not null,
     primary key(user_id,role_id),
-    constraint foreign key (user_id) references users (id),
-    constraint foreign key (role_id) references roles (id)
+    constraint user_id_fk foreign key (user_id) references users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    constraint role_id_fk foreign key (role_id) references roles (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 create table if not exists category (
 	 id bigint primary key not null auto_increment,
@@ -47,7 +47,7 @@ create table if not exists product (
     description varchar(500),
     brand varchar(100),
     id_category bigint,
-    constraint foreign key (id_category) references category (id),
+    constraint foreign key (id_category) references category (id) ON DELETE CASCADE ON UPDATE CASCADE,
     createDate datetime default null,
     updateDate datetime default null
 );
@@ -58,7 +58,7 @@ create table if not exists Discount (
 	date_discount datetime,
 	percent_discount int,
     id_product bigint,
-    constraint foreign key (id_product) references product (id),
+    constraint foreign key (id_product) references product (id) ON DELETE CASCADE ON UPDATE CASCADE,
 	createDate datetime default null,
 	updateDate datetime default null
 );
@@ -70,29 +70,29 @@ create table if not exists log (
     id_user bigint,
     id_product bigint,
 	actionDate datetime,
-    constraint foreign key (id_user) references users (id),
-    constraint foreign key (id_product) references product (id)
+    constraint foreign key (id_user) references users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    constraint foreign key (id_product) references product (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 create table if not exists cart (
 	id bigint primary key not null auto_increment ,
 	total_money double,
 	id_user bigint not null,
-	constraint foreign key (id_user) references users (id)
+	constraint foreign key (id_user) references users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 create table if not exists cart_index (
 	id bigint primary key not null auto_increment,
 	amount int,
 	id_cart bigint,
 	id_product bigint,
-	constraint foreign key (id_cart) references cart (id),
-	constraint foreign key (id_product) references product (id)
+	constraint foreign key (id_cart) references cart (id) ON DELETE CASCADE ON UPDATE CASCADE,
+	constraint foreign key (id_product) references product (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 create table if not exists user_token(
 	id bigint primary key not null auto_increment,
 	id_user bigint not null,
 	token varchar(500),
 	time_expired datetime,
-	constraint foreign key (id_user) references users (id),
+	constraint foreign key (id_user) references users (id) ON DELETE CASCADE ON UPDATE CASCADE,
 	createDate datetime default null,
 	updateDate datetime default null
 );
@@ -108,7 +108,7 @@ create table if not exists orders (
 	payment_method varchar(100),
 	order_status varchar(100),
 	id_orderer bigint,
-	constraint foreign key (id_orderer) references users (id)
+	constraint foreign key (id_orderer) references users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 create table if not exists order_details (
 	id bigint primary key not null auto_increment,
@@ -116,8 +116,8 @@ create table if not exists order_details (
 	number_of_orders int,
 	id_order bigint,
 	id_product bigint,
-	constraint foreign key (id_order) references orders (id),
-	constraint foreign key (id_product) references product (id),
+	constraint foreign key (id_order) references orders (id) ON DELETE CASCADE ON UPDATE CASCADE,
+	constraint foreign key (id_product) references product (id) ON DELETE CASCADE ON UPDATE CASCADE,
 	createDate datetime default null,
 	updateDate datetime default null
 );

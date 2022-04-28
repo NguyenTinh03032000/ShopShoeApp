@@ -11,9 +11,7 @@ import javax.persistence.Table;
 
 import com.ShopShoe.common.ERole;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
