@@ -1,13 +1,12 @@
 package com.ShopShoe.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
 import com.ShopShoe.common.ERole;
 import com.ShopShoe.common.JwtUtils;
@@ -114,7 +110,7 @@ public class AuthController {
 		if(userService.existsByUsername(signupRequest.getUsername())) {
 			return ResponseEntity
 					.badRequest()
-					.body(new MessageResponseDto("Error: Username is already taklen!"));			
+					.body(new MessageResponseDto("Error: Username is already taken!"));
 		}
 		
 		if(userService.existsByEmail(signupRequest.getEmail())) {
@@ -214,6 +210,19 @@ public class AuthController {
 		user.setRoles(roles);
 		userService.save(user);
 		return ResponseEntity.ok(new MessageResponseDto("User registered successfully!"));
+	}
+
+	// export error validation
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return errors;
 	}
 }
 

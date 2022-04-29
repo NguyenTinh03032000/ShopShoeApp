@@ -47,4 +47,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryEntity> findByName(String name) {
     	return categoryRepository.findByName(name);
     }
+
+    @Override
+    public CategoryEntity findExactlyName(String name) {
+        return categoryRepository.findExactlyName(name);
+    }
 }

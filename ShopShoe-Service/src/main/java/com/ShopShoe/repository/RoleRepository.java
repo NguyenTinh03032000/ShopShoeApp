@@ -16,5 +16,6 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Integer>{
 	Boolean existsByName(ERole name);
 	
 	@Query(value = "select * from roles where roles.id = ?1 ", nativeQuery = true)
-	RoleEntity findId(long id);
+	RoleEntity getId(long id);
+
 }

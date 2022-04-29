@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
-
 import com.ShopShoe.service.Implements.UserDetailsServiceImpl;
 
 @Configuration
@@ -68,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 		.antMatchers("/account/**").permitAll()
 		.antMatchers("/document/**").permitAll()
-		.antMatchers(AUTH_WHITELIST).authenticated()
+		.antMatchers(AUTH_WHITELIST).permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.httpBasic().authenticationEntryPoint(swaggerAuthenticationEntryPoint());

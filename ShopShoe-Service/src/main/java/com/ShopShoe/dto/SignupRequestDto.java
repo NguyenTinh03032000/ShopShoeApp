@@ -1,5 +1,7 @@
 package com.ShopShoe.dto;
 
+import org.hibernate.validator.constraints.Length;
+
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -20,7 +22,7 @@ public class SignupRequestDto {
 	private String email;
 	
 	@NotEmpty(message = "Missing password")
-	@Min(value = 8, message = "Password must be 8 characters or more")
+	@Length(min=8, max=32, message="Password must be 8-32 characters long")
 	private String password;
 
 	private long scores;

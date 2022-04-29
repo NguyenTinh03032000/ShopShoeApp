@@ -14,4 +14,5 @@ public interface CategoryService {
     CategoryEntity save(CategoryEntity u);
     void delete(CategoryEntity u);
 	List<CategoryEntity> findByName(String name);
+    CategoryEntity findExactlyName(String name);
 }

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,7 @@ import com.ShopShoe.service.UserService;
 
 @RestController
 @RequestMapping("user")
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 	private static Logger logger = Logger.getLogger(UserController.class);
 	
@@ -50,10 +52,9 @@ public class UserController {
 	PasswordEncoder encoder;
 	
 	@GetMapping()
-	@PreAuthorize("hasRole('ADMIN')")
 	public List<UserDTO> getAllUser() {
 		try {
-			return (List<UserDTO>) userService.findAll();
+			return userService.findAll();
 		} catch (Exception e) {
 			logger.error("Error", e);
 		}
@@ -61,32 +62,36 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public UserDTO getUserById(@PathVariable(value = "id") Long id) {
-		return userService.getUserDTOById(id);
+	public ResponseEntity<?> getUserById(@PathVariable(value = "id") Long id) {
+		UserDTO userDTO = userService.getUserDTOById(id);
+		if(userDTO == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDto("User not found"));
+		}else{
+			return ResponseEntity.ok(userDTO);
+		}
 	}
 	
 	@PostMapping()
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> crateUser(@Validated @RequestBody SignupRequestDto signupRequest){
 		return authController.registerUser(signupRequest);
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public String deleteUser(@PathVariable long id) {
 		try {
 			UserEntity user = userService.getById(id);
-			
-			userService.delete(user);
-			return "Delete user successful";			
+			if(user == null){
+				return "User not found";
+			}else{
+				userService.delete(user);
+				return "Delete user successful";
+			}
 		} catch (Exception e) {
-			return "Error";
+			return "Error: " +e;
 		}	
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateUser(@PathVariable(value = "id") Long id,@Valid @RequestBody SignupRequestDto signupRequest) {
 		try {
 			UserEntity user = userService.findId(id);
@@ -94,8 +99,7 @@ public class UserController {
 				if(userService.existsByUsername(signupRequest.getUsername())) {
 					return ResponseEntity
 							.badRequest()
-							.body(new MessageResponseDto("Error: Username is already taklen!"));
-					
+							.body(new MessageResponseDto("Error: Username is already taken!"));
 				}
 			}
 			if(!user.getEmail().equals(signupRequest.getEmail())) {

@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 
 @Configuration
-//@EnableSwagger2
+@EnableSwagger2
 @ConfigurationProperties("app.api")
 @ConditionalOnProperty(name="app.api.swagger.enable", havingValue = "true", matchIfMissing = false)
 public class SwaggerConfig extends WebMvcConfigurationSupport {

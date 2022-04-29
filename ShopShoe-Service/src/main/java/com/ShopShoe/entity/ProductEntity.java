@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
 @Data
 @Entity
 @Table(name = "product")
@@ -26,19 +28,22 @@ public class ProductEntity {
 	private String description;
 	private String brand;
 
+	private String image;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_category")
 	private CategoryEntity category;
 
-	public ProductEntity(long id, String name, double price, String description, String brand, CategoryEntity category) {
+	public ProductEntity(long id, String name, double price, String description, String brand, String image, CategoryEntity category) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.brand = brand;
+		this.image = image;
 		this.category = category;
 	}
+
 
 	public ProductEntity() {
 	}
@@ -89,5 +94,13 @@ public class ProductEntity {
 
 	public void setCategory(CategoryEntity category) {
 		this.category = category;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

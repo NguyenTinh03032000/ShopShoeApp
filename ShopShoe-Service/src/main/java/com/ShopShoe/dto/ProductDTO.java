@@ -14,6 +14,8 @@ public class ProductDTO {
 	private String description;
 	private String brand;
 
+	private String image;
+
 	private CategoryEntity category;
 
 	public long getId() {
@@ -64,12 +66,21 @@ public class ProductDTO {
 		this.category = category;
 	}
 
-	public ProductDTO(long id, String name, double price, String description, String brand, CategoryEntity category) {
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public ProductDTO(long id, String name, double price, String description, String brand, String image, CategoryEntity category) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.description = description;
 		this.brand = brand;
+		this.image = image;
 		this.category = category;
 	}
 

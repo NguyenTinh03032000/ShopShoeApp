@@ -11,14 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ShopShoe.dto.MessageResponseDto;
 import com.ShopShoe.dto.ProductDTO;
@@ -29,6 +22,7 @@ import com.ShopShoe.service.LogService;
 import com.ShopShoe.service.ProductService;
 import com.ShopShoe.service.UserService;
 import com.ShopShoe.service.Implements.UserDetailsImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("product")
@@ -43,9 +37,9 @@ public class ProductController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@GetMapping()
-	public List<ProductDTO> getProduct() {
+	public List<ProductDTO> getAllProduct() {
 		return (List<ProductDTO>) productService.findAll();
 	}
 
@@ -65,12 +59,14 @@ public class ProductController {
 	}
 
 	@PostMapping()
-	public String createProduct(@RequestBody ProductEntity product) {
+	public String createProduct(@RequestParam("file") MultipartFile file, @RequestBody ProductEntity product) {
 		try {
 			if(productService.existsByName(product.getName())){
 				return "Product already exist";
 			}else {
+				product.setImage(file.getName());
 				productService.save(product);
+
 				LogEntity logEntity = new LogEntity();
 				logEntity.setName_action("Add new product");
 				logEntity.setName_method("POST");
