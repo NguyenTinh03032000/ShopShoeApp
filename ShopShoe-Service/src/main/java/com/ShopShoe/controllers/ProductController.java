@@ -109,7 +109,6 @@ public class ProductController {
 				product.setName(productDetails.getName());
 				product.setPrice(productDetails.getPrice());
 				product.setDescription(productDetails.getDescription());
-				product.setBrand(productDetails.getBrand());
 				product.setCategory(productDetails.getCategory());
 				
 				LogEntity logEntity = new LogEntity();

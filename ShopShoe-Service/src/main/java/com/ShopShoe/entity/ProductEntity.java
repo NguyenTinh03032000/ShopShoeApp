@@ -26,20 +26,17 @@ public class ProductEntity {
 	private String name;
 	private double price;
 	private String description;
-	private String brand;
-
 	private String image;
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_category")
 	private CategoryEntity category;
 
-	public ProductEntity(long id, String name, double price, String description, String brand, String image, CategoryEntity category) {
+	public ProductEntity(long id, String name, double price, String description, String image, CategoryEntity category) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.description = description;
-		this.brand = brand;
 		this.image = image;
 		this.category = category;
 	}
@@ -78,14 +75,6 @@ public class ProductEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getBrand() {
-		return brand;
-	}
-
-	public void setBrand(String brand) {
-		this.brand = brand;
 	}
 
 	public CategoryEntity getCategory() {

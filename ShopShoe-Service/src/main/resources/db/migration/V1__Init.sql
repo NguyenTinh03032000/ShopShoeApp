@@ -24,7 +24,3 @@ create table user_roles (
     constraint foreign key (user_id) references users (id),
     constraint foreign key (role_id) references roles (id)
 );
-
-INSERT INTO roles(name) VALUES('ROLE_CUSTOMER');
-INSERT INTO roles(name) VALUES('ROLE_ADMIN');
-INSERT INTO roles(name) VALUES('ROLE_SALESMAN');

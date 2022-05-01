@@ -45,8 +45,8 @@ create table if not exists product (
     name varchar(200),
     price double,
     description varchar(500),
-    brand varchar(100),
     id_category bigint,
+    image varchar(500),
     constraint foreign key (id_category) references category (id) ON DELETE CASCADE ON UPDATE CASCADE,
     createDate datetime default null,
     updateDate datetime default null
@@ -121,3 +121,4 @@ create table if not exists order_details (
 	createDate datetime default null,
 	updateDate datetime default null
 );
+
