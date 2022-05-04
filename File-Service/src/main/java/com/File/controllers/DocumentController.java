@@ -59,4 +59,10 @@ public class DocumentController {
 			return ResponseEntity.badRequest().body(new MessageResponseDto("Error"));
 		}
     }
+
+	@PostMapping("/getNameFile")
+	public String getNameFile(@RequestParam("file") MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		return fileName;
+	}
 }

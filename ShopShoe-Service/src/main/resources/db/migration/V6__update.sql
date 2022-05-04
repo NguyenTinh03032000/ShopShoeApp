@@ -37,8 +37,8 @@ create table if not exists user_roles (
 create table if not exists category (
 	 id bigint primary key not null auto_increment,
   	 name varchar(100),
- 	 createDate datetime default null,
-  	 updateDate datetime default null
+ 	 create_Date datetime default null,
+  	 update_Date datetime default null
 );
 create table if not exists product (
 	id bigint primary key not null auto_increment,
@@ -48,8 +48,8 @@ create table if not exists product (
     id_category bigint,
     image varchar(500),
     constraint foreign key (id_category) references category (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    createDate datetime default null,
-    updateDate datetime default null
+    create_Date datetime default null,
+    update_Date datetime default null
 );
 create table if not exists Discount (
 	id bigint primary key not null auto_increment,
@@ -69,7 +69,7 @@ create table if not exists log (
     content varchar(500),
     id_user bigint,
     id_product bigint,
-	actionDate datetime,
+	action_Date datetime,
     constraint foreign key (id_user) references users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     constraint foreign key (id_product) references product (id) ON DELETE CASCADE ON UPDATE CASCADE
 );

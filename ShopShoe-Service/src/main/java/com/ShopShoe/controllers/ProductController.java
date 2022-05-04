@@ -1,16 +1,19 @@
 package com.ShopShoe.controllers;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.validation.Valid;
 
+import com.ShopShoe.Mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.ShopShoe.dto.MessageResponseDto;
@@ -38,14 +41,22 @@ public class ProductController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private ProductMapper  productMapper;
+
 	@GetMapping()
 	public List<ProductDTO> getAllProduct() {
 		return (List<ProductDTO>) productService.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Optional<ProductEntity> getProductById(@PathVariable(value = "id") Long id) {
-		return productService.findById(id);
+	public ResponseEntity<?> getProductById(@PathVariable(value = "id") Long id) {
+		ProductEntity product = productService.getById(id);
+		if(product == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDto("No product found"));
+		}else{
+			return ResponseEntity.ok(productMapper.productEntityToProductDTO(product));
+		}
 	}
 	
 	/**
@@ -59,12 +70,13 @@ public class ProductController {
 	}
 
 	@PostMapping()
-	public String createProduct(@RequestParam("file") MultipartFile file, @RequestBody ProductEntity product) {
+	public ResponseEntity<?> createProduct(@RequestBody ProductEntity product) {
 		try {
 			if(productService.existsByName(product.getName())){
-				return "Product already exist";
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponseDto("Product already exist"));
 			}else {
-				product.setImage(file.getName());
+				Date createDate = new Date((new Date()).getTime());
+				product.setCreateDate(createDate);
 				productService.save(product);
 
 				LogEntity logEntity = new LogEntity();
@@ -73,13 +85,14 @@ public class ProductController {
 				logEntity.setContent("Add product: "+product.getName());
 				logEntity.setUser(getUserCurrent());
 				logEntity.setProduct(product);
-				Date createDate = new Date((new Date()).getTime());
+
 				logEntity.setAction_Date(createDate);
 				logService.save(logEntity);
-				return "Add product successful";
+
+				return ResponseEntity.ok(product);
 			}
 		} catch (Exception e) {
-			return "Error";
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponseDto("Error: "+e));
 		}
 	}
 
@@ -87,9 +100,12 @@ public class ProductController {
 	public String deleteProduct(@PathVariable Long id){
 		try {
 			ProductEntity product = productService.getById(id);
-
-			productService.delete(product);
-			return "Delete product successful";
+			if(product == null){
+				return "No product found";
+			}else{
+				productService.delete(product);
+				return "Delete product successful";
+			}
 		} catch (Exception e) {
 			return "Error";
 		}
@@ -109,10 +125,11 @@ public class ProductController {
 				product.setName(productDetails.getName());
 				product.setPrice(productDetails.getPrice());
 				product.setDescription(productDetails.getDescription());
+				product.setImage(productDetails.getImage());
 				product.setCategory(productDetails.getCategory());
 				
 				LogEntity logEntity = new LogEntity();
-				logEntity.setName_action("Update product product");
+				logEntity.setName_action("Update product");
 				logEntity.setName_method("PUT");
 				logEntity.setContent("Update product: "+product.getName());
 				logEntity.setUser(getUserCurrent());
@@ -125,22 +142,6 @@ public class ProductController {
 			}else {
 				return ResponseEntity.ok(new MessageResponseDto("Update object not found"));
 			}
-			
-			
-			
-//			return productService.findById(id)
-//					.map(product ->{
-//						product.setName(productDetails.getName());
-//						product.setPrice(productDetails.getPrice());
-//						product.setDescription(productDetails.getDescription());
-//						product.setBrand(productDetails.getBrand());
-//						product.setCategory(productDetails.getCategory());
-//						return productService.save(product);
-//					})
-//					.orElseGet(()->{
-//						productDetails.setId(id);
-//						return productService.save(productDetails);
-//					});
 		} catch (Exception e) {
 		}
 		return null;

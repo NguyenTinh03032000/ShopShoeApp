@@ -37,19 +37,19 @@ public class LogEntity {
 	private ProductEntity product;
 	
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+7")
-	private Date action_Date;
+	private Date actionDate;
 
 	public LogEntity() {
 	}
 
-	public LogEntity(long id, String name_action, String name_method, String content, UserEntity user, ProductEntity product, Date action_Date) {
+	public LogEntity(long id, String name_action, String name_method, String content, UserEntity user, ProductEntity product, Date actionDate) {
 		this.id = id;
 		this.name_action = name_action;
 		this.name_method = name_method;
 		this.content = content;
 		this.user = user;
 		this.product = product;
-		this.action_Date = action_Date;
+		this.actionDate = actionDate;
 	}
 
 	public long getId() {
@@ -101,10 +101,10 @@ public class LogEntity {
 	}
 
 	public Date getAction_Date() {
-		return action_Date;
+		return actionDate;
 	}
 
-	public void setAction_Date(Date action_Date) {
-		this.action_Date = action_Date;
+	public void setAction_Date(Date actionDate) {
+		this.actionDate = actionDate;
 	}
 }

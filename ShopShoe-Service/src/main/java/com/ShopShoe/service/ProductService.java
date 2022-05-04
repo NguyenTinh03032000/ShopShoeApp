@@ -9,7 +9,7 @@ import com.ShopShoe.entity.ProductEntity;
 public interface ProductService {
 	Iterable<ProductDTO> findAll();
 	Optional<ProductEntity> findById(long id);
-	ProductEntity getById(long id);
+    ProductEntity getById(long id);
     ProductEntity save(ProductEntity u);
     void delete(ProductEntity u);
     Boolean existsByName(String name);
